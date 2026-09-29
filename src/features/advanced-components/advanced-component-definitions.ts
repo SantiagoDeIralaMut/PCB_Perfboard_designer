@@ -57,7 +57,7 @@ export interface AdvancedComponentDefinition {
 export const PIN_TILE_HALF = 0.5;
 
 export function getAdvancedIconPath(def: AdvancedComponentDefinition): string {
-  return def.iconPath ?? `/icons/components/${def.id}.svg`;
+  return def.iconPath ?? `icons/components/${def.id}.svg`;
 }
 
 const INLINE_3_PINS: PinOffset[] = [{dx: 0, dy: 0}, {dx: 1, dy: 0}, {dx: 2, dy: 0}];
