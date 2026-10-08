@@ -1,8 +1,17 @@
 import {Ic} from "./ic";
+import {CategoryId} from "./catalog/catalog-categories";
+
+export type CustomIcType = "ic" | "module";
+
+// Which Custom subcategory of the Components panel a new part is listed under.
+const CUSTOM_CATEGORY: Record<CustomIcType, CategoryId> = {
+  ic: "ics.custom",
+  module: "modules.custom",
+};
 
 // IC Editor Modal Handlers
 const modal = document.getElementById('icEditorModal');
-const openModalBtn = document.getElementById('createCustomIcTrigger');
+const typeSelectEl = document.getElementById('icTypeSelect') as HTMLSelectElement;
 const closeModalBtn = document.getElementById('closeIcModalBtn');
 const cancelModalBtn = document.getElementById('cancelCustomIcBtn');
 const saveIcBtn = document.getElementById('saveCustomIcBtn');
@@ -27,10 +36,13 @@ function renderPinInputs() {
   pinLabelsContainer.innerHTML = html;
 }
 
-openModalBtn?.addEventListener('click', () => {
+// Opened from the Components panel's "Custom IC…" / "Custom Module…" entries, with the type
+// preselected. The user can still switch it before saving.
+export function openIcEditor(type: CustomIcType) {
+  if (typeSelectEl) typeSelectEl.value = type;
   renderPinInputs();
   if (modal) modal.style.display = 'flex';
-});
+}
 
 closeModalBtn?.addEventListener('click', () => {
   if (modal) modal.style.display = 'none';
@@ -60,6 +72,7 @@ saveIcBtn?.addEventListener('click', () => {
   }
 
   const customIc = new Ic(width, height, pinDescriptions, name, true);
+  customIc.category = CUSTOM_CATEGORY[typeSelectEl?.value === 'module' ? 'module' : 'ic'];
   Ic.add(customIc, true);
 
   if (modal) modal.style.display = 'none';
